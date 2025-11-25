@@ -1,0 +1,12 @@
+<h2 th:text="${product.productName}"></h2>
+
+<img th:src="@{'/assets/images/thumbs/' + ${product.productId} + '/' + ${product.featureImage}}"
+     style="width:150px; border-radius:8px;">
+
+
+<h3>Gallery</h3>
+
+<div th:each="i : ${#numbers.sequence(1,4)}">
+    <img th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_' + ${i} + '.png'}"
+         style="width:220px; margin-right:10px;">
+</div>
