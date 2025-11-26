@@ -1,417 +1,23 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <title th:text="${product.productName} + ' – Zelora'">Product Details</title>-->
-
-<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"-->
-<!--          rel="stylesheet"/>-->
-<!--    <style>-->
-<!--        .main-image {-->
-<!--            max-height: 400px;-->
-<!--            object-fit: cover;-->
-<!--        }-->
-<!--        .thumb-image {-->
-<!--            width: 80px;-->
-<!--            height: 80px;-->
-<!--            object-fit: cover;-->
-<!--            cursor: pointer;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body class="bg-light">-->
-
-<!--<div class="container py-4">-->
-
-
-<!--    <a href="/products" class="btn btn-link mb-3">&larr; Back to Search</a>-->
-
-<!--    <div class="row">-->
-
-<!--        <div class="col-md-6 mb-3">-->
-
-<!--&lt;!&ndash;            thumbs image&ndash;&gt;-->
-<!--            <img id="mainImage"-->
-<!--                 class="img-fluid rounded border main-image mb-3"-->
-<!--                 th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_1.png'}"-->
-<!--                 alt="Main product image"-->
-<!--                 onerror="this.src='/assets/images/large/no-image.png'">-->
-
-<!--&lt;!&ndash;            large imge&ndash;&gt;-->
-<!--            <div class="d-flex flex-wrap gap-2">-->
-
-<!--                <img class="thumb-image img-thumbnail"-->
-<!--                     th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_1.png'}"-->
-<!--                     alt="thumb 1"-->
-<!--                     onerror="this.style.display='none'"-->
-<!--                     onclick="document.getElementById('mainImage').src=this.src">-->
-
-<!--                <img class="thumb-image img-thumbnail"-->
-<!--                     th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_2.png'}"-->
-<!--                     alt="thumb 2"-->
-<!--                     onerror="this.style.display='none'"-->
-<!--                     onclick="document.getElementById('mainImage').src=this.src">-->
-
-<!--                <img class="thumb-image img-thumbnail"-->
-<!--                     th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_3.png'}"-->
-<!--                     alt="thumb 3"-->
-<!--                     onerror="this.style.display='none'"-->
-<!--                     onclick="document.getElementById('mainImage').src=this.src">-->
-
-<!--                <img class="thumb-image img-thumbnail"-->
-<!--                     th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_4.png'}"-->
-<!--                     alt="thumb 4"-->
-<!--                     onerror="this.style.display='none'"-->
-<!--                     onclick="document.getElementById('mainImage').src=this.src">-->
-
-<!--            </div>-->
-<!--        </div>-->
-
-<!--&lt;!&ndash;        details&ndash;&gt;-->
-<!--        <div class="col-md-6 mb-3">-->
-<!--            <h2 th:text="${product.productName}">Product Name</h2>-->
-
-<!--            <p class="text-muted mb-1">-->
-<!--                Category:-->
-<!--                <span th:text="${product.categoryId != null ? product.categoryId.categoryName : 'N/A'}"></span>-->
-<!--            </p>-->
-
-<!--            &lt;!&ndash; Price & discounted price &ndash;&gt;-->
-<!--            <div class="mb-3">-->
-<!--                <span class="h4 text-success me-2"-->
-<!--                      th:text="${product.discountedPrice != null and product.discountedPrice < product.price} ?-->
-<!--                               '€' + ${product.discountedPrice} :-->
-<!--                               '€' + ${product.price}">-->
-<!--                </span>-->
-
-<!--                <span class="text-muted text-decoration-line-through"-->
-<!--                      th:if="${product.discountedPrice != null and product.discountedPrice < product.price}"-->
-<!--                      th:text="'€' + ${product.price}">-->
-<!--                </span>-->
-<!--            </div>-->
-
-<!--            <h5>Description</h5>-->
-<!--            <p th:text="${product.description}">Product description here.</p>-->
-<!--        </div>-->
-<!--    </div>-->
-
-
-<!--    <hr class="my-4">-->
-
-<!--    <h4>Customer Reviews</h4>-->
-
-<!--    <p class="mb-3">-->
-<!--        <strong>Average Rating:</strong>-->
-<!--        <span th:text="${avgRating}"></span> / 5-->
-<!--    </p>-->
-
-<!--    <div th:if="${reviews.size() > 0}">-->
-<!--        <div class="card mb-3" th:each="r : ${reviews}">-->
-<!--            <div class="card-body">-->
-
-<!--                <h6>-->
-<!--                    Rating:-->
-<!--                    <span th:text="${r.rating}"></span> / 5-->
-<!--                </h6>-->
-
-<!--                <p th:text="${r.reviewText}"></p>-->
-
-<!--                <p class="text-muted small">-->
-<!--                    By-->
-<!--                    <span th:text="${r.customerId.firstName}"></span>-->
-<!--                    from-->
-<!--                    <span th:text="${r.customerId.city}"></span>-->
-<!--                </p>-->
-
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div th:if="${reviews.size() == 0}">-->
-<!--        <p class="text-muted">No reviews available.</p>-->
-<!--    </div>-->
-
-
-
-<!--    <hr class="my-4">-->
-
-<!--    <h4>Stock Information</h4>-->
-
-<!--    <p class="fw-bold"-->
-<!--       th:classappend="${available <= 0} ? 'text-danger' :-->
-<!--                   (${available <= product.inventoryList[0].reorderPoint} ? 'text-warning' : 'text-success')"-->
-<!--       th:text="${stockMessage}">-->
-<!--    </p>-->
-
-
-<!--</div>-->
-
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>-->
-<!--</body>-->
-<!--</html>-->
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-
-<!--<head>-->
-<!--    <title th:text="${product.productName} + ' – Zelora'">Product Details</title>-->
-
-<!--    &lt;!&ndash; Bootstrap &ndash;&gt;-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>-->
-
-<!--    <style>-->
-<!--        body {-->
-<!--            background: #fafafa;-->
-<!--            padding-top: 70px; /* navbar spacing */-->
-<!--        }-->
-
-<!--        .main-image {-->
-<!--            max-height: 420px;-->
-<!--            object-fit: cover;-->
-<!--            border-radius: 8px;-->
-<!--        }-->
-
-<!--        .thumb-image {-->
-<!--            width: 80px;-->
-<!--            height: 80px;-->
-<!--            object-fit: cover;-->
-<!--            cursor: pointer;-->
-<!--            border-radius: 6px;-->
-<!--            transition: 0.2s;-->
-<!--        }-->
-
-<!--        .thumb-image:hover {-->
-<!--            transform: scale(1.05);-->
-<!--            border-color: #000;-->
-<!--        }-->
-
-<!--        .details-box {-->
-<!--            background: white;-->
-<!--            padding: 30px;-->
-<!--            border-radius: 12px;-->
-<!--            box-shadow: 0 2px 10px rgba(0,0,0,0.08);-->
-<!--        }-->
-
-<!--        .footer {-->
-<!--            background: #222 !important;-->
-<!--            color: #ddd;-->
-<!--            border-top: 1px solid #444;-->
-<!--        }-->
-<!--        .footer-link {-->
-<!--            color: #ccc;-->
-<!--            text-decoration: none;-->
-<!--        }-->
-<!--        .footer-link:hover {-->
-<!--            color: #fff;-->
-<!--        }-->
-
-<!--        .footer-brand {-->
-<!--            font-size: 1.6rem;-->
-<!--            font-weight: bold;-->
-<!--            color: #fff;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-
-<!--<body>-->
-
-<!--&lt;!&ndash; NAVBAR (MATCHES HOMEPAGE & SEARCH PAGE) &ndash;&gt;-->
-<!--<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">-->
-<!--    <div class="container-xl">-->
-<!--        <a class="navbar-brand fw-bold fs-3" href="/">Zelora</a>-->
-
-<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"-->
-<!--                data-bs-target="#navbarNav">-->
-<!--            <span class="navbar-toggler-icon"></span>-->
-<!--        </button>-->
-
-<!--        <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--            <ul class="navbar-nav ms-auto">-->
-
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="/" th:classappend="${activePage=='home'} ? 'active fw-semibold' : ''">Home</a>-->
-<!--                </li>-->
-
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="/products" th:classappend="${activePage=='browse'} ? 'active fw-semibold' : ''">Browse Products</a>-->
-<!--                </li>-->
-
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="/products/search" th:classappend="${activePage=='search'} ? 'active fw-semibold' : ''">Search</a>-->
-<!--                </li>-->
-
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</nav>-->
-
-
-<!--&lt;!&ndash; PAGE CONTENT &ndash;&gt;-->
-<!--<div class="container-xl mt-4">-->
-<!--    <a href="/products" class="btn btn-outline-dark mb-3">&larr; Back to Products</a>-->
-
-<!--    <div class="details-box">-->
-
-<!--        <div class="row">-->
-
-<!--            &lt;!&ndash; LEFT: IMAGES &ndash;&gt;-->
-<!--            <div class="col-lg-6 mb-4">-->
-
-<!--                <img id="mainImage"-->
-<!--                     class="img-fluid border main-image mb-3"-->
-<!--                     th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_1.png'}"-->
-<!--                     alt="Main product image"-->
-<!--                     onerror="this.src='/assets/images/large/no-image.png'">-->
-
-<!--                <div class="d-flex flex-wrap gap-2">-->
-
-<!--                    <img class="thumb-image img-thumbnail"-->
-<!--                         th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_1.png'}"-->
-<!--                         onerror="this.style.display='none'"-->
-<!--                         onclick="document.getElementById('mainImage').src=this.src">-->
-
-<!--                    <img class="thumb-image img-thumbnail"-->
-<!--                         th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_2.png'}"-->
-<!--                         onerror="this.style.display='none'"-->
-<!--                         onclick="document.getElementById('mainImage').src=this.src">-->
-
-<!--                    <img class="thumb-image img-thumbnail"-->
-<!--                         th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_3.png'}"-->
-<!--                         onerror="this.style.display='none'"-->
-<!--                         onclick="document.getElementById('mainImage').src=this.src">-->
-
-<!--                    <img class="thumb-image img-thumbnail"-->
-<!--                         th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_4.png'}"-->
-<!--                         onerror="this.style.display='none'"-->
-<!--                         onclick="document.getElementById('mainImage').src=this.src">-->
-
-<!--                </div>-->
-<!--            </div>-->
-
-
-<!--            &lt;!&ndash; RIGHT: PRODUCT DETAILS &ndash;&gt;-->
-<!--            <div class="col-lg-6">-->
-
-<!--                <h2 class="fw-bold mb-2" th:text="${product.productName}"></h2>-->
-
-<!--                <p class="text-muted mb-2">-->
-<!--                    Category:-->
-<!--                    <span th:text="${product.categoryId != null ? product.categoryId.categoryName : 'N/A'}"></span>-->
-<!--                </p>-->
-
-<!--                &lt;!&ndash; Price &ndash;&gt;-->
-<!--                <div class="mb-3">-->
-<!--                    <span class="h3 text-success fw-bold me-3"-->
-<!--                          th:text="${product.discountedPrice != null and product.discountedPrice < product.price} ?-->
-<!--                                   '€' + ${product.discountedPrice} :-->
-<!--                                   '€' + ${product.price}">-->
-<!--                    </span>-->
-
-<!--                    <span class="text-muted text-decoration-line-through"-->
-<!--                          th:if="${product.discountedPrice != null and product.discountedPrice < product.price}"-->
-<!--                          th:text="'€' + ${product.price}">-->
-<!--                    </span>-->
-<!--                </div>-->
-
-<!--                <h5>Description</h5>-->
-<!--                <p class="text-secondary" th:text="${product.description}"></p>-->
-
-<!--            </div>-->
-
-<!--        </div>-->
-
-
-<!--        &lt;!&ndash; REVIEWS &ndash;&gt;-->
-<!--        <hr class="my-4">-->
-
-<!--        <h4 class="mb-3">Customer Reviews</h4>-->
-
-<!--        <p>-->
-<!--            <strong>Average Rating:</strong>-->
-<!--            <span th:text="${avgRating}"></span> / 5-->
-<!--        </p>-->
-
-<!--        <div th:if="${reviews.size() > 0}">-->
-<!--            <div class="card shadow-sm mb-3" th:each="r : ${reviews}">-->
-<!--                <div class="card-body">-->
-<!--                    <h6 class="fw-semibold">-->
-<!--                        Rating: <span th:text="${r.rating}"></span> / 5-->
-<!--                    </h6>-->
-
-<!--                    <p th:text="${r.reviewText}"></p>-->
-
-<!--                    <p class="text-muted small">-->
-<!--                        By <span th:text="${r.customerId.firstName}"></span>-->
-<!--                        from <span th:text="${r.customerId.city}"></span>-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <p th:if="${reviews.size() == 0}" class="text-muted">No reviews yet.</p>-->
-
-
-<!--        &lt;!&ndash; STOCK INFO &ndash;&gt;-->
-<!--        <hr class="my-4">-->
-
-<!--        <h4>Stock Information</h4>-->
-
-<!--        <p class="fw-bold"-->
-<!--           th:classappend="${available <= 0} ? 'text-danger' :-->
-<!--                           (${available <= product.inventoryList[0].reorderPoint} ? 'text-warning' : 'text-success')"-->
-<!--           th:text="${stockMessage}">-->
-<!--        </p>-->
-
-<!--    </div> &lt;!&ndash; end card &ndash;&gt;-->
-<!--</div>-->
-
-
-<!--&lt;!&ndash; FOOTER (MATCHES HOMEPAGE + SEARCH PAGE) &ndash;&gt;-->
-<!--<footer class="footer mt-5 py-4">-->
-<!--    <div class="container-xl text-center">-->
-
-<!--        <p class="footer-brand mb-2">Zelora</p>-->
-
-<!--        <div class="footer-links mb-3">-->
-<!--            <a href="/contact" class="footer-link mx-2">Contact Us</a>-->
-<!--            <a href="/about" class="footer-link mx-2">About Us</a>-->
-<!--            <a href="/find-us" class="footer-link mx-2">Find Us</a>-->
-<!--            <a href="/products" class="footer-link mx-2">Shop</a>-->
-<!--        </div>-->
-
-<!--        <p class="small mb-0" style="color:#ccc;">-->
-<!--            © 2025 Zelora — All Rights Reserved.-->
-<!--        </p>-->
-
-<!--    </div>-->
-<!--</footer>-->
-
-
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>-->
-
-<!--</body>-->
-<!--</html>-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title th:text="${product.productName} + ' – Zelora'">Product Details</title>
+    <meta charset="UTF-8">
+    <title>Zelora – <span th:text="${product.productName}"></span></title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
     <style>
         body {
             background: #fafafa;
-            padding-top: 70px; /* navbar spacing */
+            padding-top: 70px;
         }
-
         .main-image {
             max-height: 420px;
             object-fit: cover;
             border-radius: 8px;
             width: 100%;
         }
-
         .thumb-image {
             width: 80px;
             height: 80px;
@@ -420,13 +26,10 @@
             border-radius: 6px;
             transition: 0.2s;
         }
-
         .thumb-image:hover {
             transform: scale(1.05);
             border-color: #000;
         }
-
-        /* Full-width card style */
         .details-box {
             background: white;
             padding: 40px;
@@ -434,23 +37,18 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             width: 100%;
         }
-
-        /* Footer */
         .footer {
-            background: #222 !important;
+            background: #222;
             color: #ddd;
             border-top: 1px solid #444;
         }
-
         .footer-link {
             color: #ccc;
             text-decoration: none;
         }
-
         .footer-link:hover {
             color: #fff;
         }
-
         .footer-brand {
             font-size: 1.6rem;
             font-weight: bold;
@@ -461,7 +59,7 @@
 
 <body>
 
-<!-- FULL-WIDTH NAVBAR -->
+
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top px-5">
     <div class="w-100 d-flex justify-content-between align-items-center">
 
@@ -476,15 +74,15 @@
             <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/" th:classappend="${activePage=='home'} ? 'active fw-semibold' : ''">Home</a>
+                    <a class="nav-link" href="/" th:text="#{nav.home}"></a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/products" th:classappend="${activePage=='browse'} ? 'active fw-semibold' : ''">Browse Products</a>
+                    <a class="nav-link" href="/products" th:text="#{nav.browse}"></a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/products/search" th:classappend="${activePage=='search'} ? 'active fw-semibold' : ''">Search</a>
+                    <a class="nav-link" href="/products/search" th:text="#{nav.search}"></a>
                 </li>
 
             </ul>
@@ -494,62 +92,64 @@
 </nav>
 
 
-
-<!-- FULL-WIDTH PAGE CONTENT (AUTO WIDTH) -->
 <div class="container-fluid mt-4 px-5">
 
-    <a href="/products" class="btn btn-outline-dark mb-3">&larr; Back to Products</a>
+    <a href="/products" class="btn btn-outline-dark mb-3">
+        &larr; <span th:text="#{product.back}">Back to Products</span>
+    </a>
 
     <div class="details-box">
 
         <div class="row">
 
-            <!-- LEFT: IMAGES -->
+
+            <!-- left side -->
             <div class="col-lg-6 mb-4">
+
 
                 <img id="mainImage"
                      class="img-fluid border main-image mb-3"
                      th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_1.png'}"
-                     alt="Main product image"
-                     onerror="this.src='/assets/images/large/no-image.png'">
+                     th:onerror="'this.src=''/assets/images/large/' + ${product.productId} + '/no-image.png'''">
+
+
 
                 <div class="d-flex flex-wrap gap-2">
 
                     <img class="thumb-image img-thumbnail"
                          th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_1.png'}"
-                         onerror="this.style.display='none'"
+                         onerror="this.remove()"
                          onclick="document.getElementById('mainImage').src=this.src">
 
                     <img class="thumb-image img-thumbnail"
                          th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_2.png'}"
-                         onerror="this.style.display='none'"
+                         onerror="this.remove()"
                          onclick="document.getElementById('mainImage').src=this.src">
 
                     <img class="thumb-image img-thumbnail"
                          th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_3.png'}"
-                         onerror="this.style.display='none'"
+                         onerror="this.remove()"
                          onclick="document.getElementById('mainImage').src=this.src">
 
                     <img class="thumb-image img-thumbnail"
                          th:src="@{'/assets/images/large/' + ${product.productId} + '/' + ${product.productId} + '_4.png'}"
-                         onerror="this.style.display='none'"
+                         onerror="this.remove()"
                          onclick="document.getElementById('mainImage').src=this.src">
-
                 </div>
+
             </div>
 
 
-            <!-- RIGHT: PRODUCT DETAILS -->
+            <!-- right side -->
             <div class="col-lg-6">
 
                 <h2 class="fw-bold mb-2" th:text="${product.productName}"></h2>
 
                 <p class="text-muted mb-2">
-                    Category:
+                    <strong th:text="#{product.category}">Category:</strong>
                     <span th:text="${product.categoryId != null ? product.categoryId.categoryName : 'N/A'}"></span>
                 </p>
 
-                <!-- Price -->
                 <div class="mb-3">
                     <span class="h3 text-success fw-bold me-3"
                           th:text="${product.discountedPrice != null and product.discountedPrice < product.price} ?
@@ -563,48 +163,50 @@
                     </span>
                 </div>
 
-                <h5>Description</h5>
+                <h5 th:text="#{product.description}">Description</h5>
                 <p class="text-secondary" th:text="${product.description}"></p>
 
             </div>
 
         </div>
 
-
-        <!-- REVIEWS -->
         <hr class="my-4">
 
-        <h4 class="mb-3">Customer Reviews</h4>
+        <h4 th:text="#{product.reviews}">Customer Reviews</h4>
 
         <p>
-            <strong>Average Rating:</strong>
-            <span th:text="${avgRating}"></span> / 5
+            <strong th:text="#{product.rating}"></strong>
+            <span th:text="${#numbers.formatDecimal(avgRating, 1, 2)}"></span>
+
+
         </p>
 
         <div th:if="${reviews.size() > 0}">
             <div class="card shadow-sm mb-3" th:each="r : ${reviews}">
                 <div class="card-body">
+
                     <h6 class="fw-semibold">
-                        Rating: <span th:text="${r.rating}"></span> / 5
+                        <span th:text="#{product.rating}"></span>
+                        <span th:text="${r.rating}"></span> / 5
                     </h6>
 
                     <p th:text="${r.reviewText}"></p>
 
                     <p class="text-muted small">
-                        By <span th:text="${r.customerId.firstName}"></span>
-                        from <span th:text="${r.customerId.city}"></span>
+                        <span th:text="${r.customerId.firstName}"></span>,
+                        <span th:text="${r.customerId.city}"></span>
                     </p>
                 </div>
             </div>
         </div>
 
-        <p th:if="${reviews.size() == 0}" class="text-muted">No reviews yet.</p>
+        <p th:if="${reviews.size() == 0}" class="text-muted" th:text="#{product.noReviews}">
+            No reviews yet.
+        </p>
 
-
-        <!-- STOCK INFO -->
         <hr class="my-4">
 
-        <h4>Stock Information</h4>
+        <h4 th:text="#{product.stockInfo}">Stock Information</h4>
 
         <p class="fw-bold"
            th:classappend="${available <= 0} ? 'text-danger' :
@@ -615,27 +217,22 @@
     </div>
 </div>
 
-
-
-<!-- FULL-WIDTH FOOTER -->
 <footer class="footer mt-5 py-4 w-100">
     <div class="text-center">
-
         <p class="footer-brand mb-2">Zelora</p>
 
         <div class="footer-links mb-3">
-            <a href="/contact" class="footer-link mx-2">Contact Us</a>
-            <a href="/about" class="footer-link mx-2">About Us</a>
-            <a href="/find-us" class="footer-link mx-2">Find Us</a>
-            <a href="/products" class="footer-link mx-2">Shop</a>
+            <a href="/contact" class="footer-link mx-2" th:text="#{footer.contact}"></a>
+            <a href="/about" class="footer-link mx-2" th:text="#{footer.about}"></a>
+            <a href="/find-us" class="footer-link mx-2" th:text="#{footer.find}"></a>
+            <a href="/products" class="footer-link mx-2" th:text="#{footer.shop}"></a>
         </div>
 
-        <p class="small mb-0" style="color:#ccc;">
+        <p class="small mb-0" style="color:#ccc;" th:text="#{footer.rights}">
             © 2025 Zelora — All Rights Reserved.
         </p>
     </div>
 </footer>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

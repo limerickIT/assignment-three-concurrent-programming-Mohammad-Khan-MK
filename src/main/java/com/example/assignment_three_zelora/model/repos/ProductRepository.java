@@ -23,6 +23,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     AND (:maxPrice IS NULL OR p.price <= :maxPrice)
     AND (:productDesc IS NULL OR p.description LIKE CONCAT('%', :productDesc, '%'))
     AND (:releaseAfter IS NULL OR p.releaseDate >= :releaseAfter)
+    ORDER BY p.productId ASC
     """)
     List<Product> searchProducts(
             @Param("name") String name,
@@ -34,8 +35,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     );
 
     List<Product> findTop3ByOrderByPriceAsc();
-
 }
+
 
 
 
