@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Zelora – Sustainable Fashion</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            padding-top: 70px;
+            background: #fafafa;
+        }
+
+        .navbar {
+            background: #ffffff !important;
+            border-bottom: 1px solid #e5e5e5;
+            width: auto;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+
+
+        .hero-section {
+            height: 550px;
+            background-size: cover;
+            background-position: top center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.8);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .hero-section-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateY(80px);
+        }
+
+        .hero-buttons button {
+            margin-top: 8px;
+            padding: 12px 22px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+        }
+
+
+        .category-card {
+            padding: 18px;
+            background: white;
+            border-radius: 6px;
+            transition: transform 0.2s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+
+        .product-card img {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+
+        .red-line-through {
+            color: #000;
+            text-decoration: line-through;
+            text-decoration-color: red;
+            text-decoration-thickness: 2px;
+        }
+
+
+        .footer {
+            background: #222;
+            color: #ddd;
+            border-top: 1px solid #444;
+        }
+
+        .footer-brand {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .footer-links .footer-link {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .footer-links .footer-link:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container-xl">
+
+        <a class="navbar-brand fw-bold fs-3" href="/">Zelora</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/products">Browse Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="/products">Categories</a></li>
+                <li class="nav-item"><a class="nav-link" href="/products">Search</a></li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+
+
+
+
+<!-- hero  -->
+<div class="container-xl">
+    <div class="hero-section"
+         th:style="'background-image: url(/assets/images/hero/hero.jpg)'">
+
+        <div class="hero-section-content">
+            <h1 class="display-3 fw-bold mb-4">Zelora</h1>
+
+            <div class="hero-buttons d-flex gap-3">
+                <a href="/products"><button class="btn btn-light px-4 py-2">Browse Products</button></a>
+                <a href="/categories"><button class="btn btn-light px-4 py-2">View Categories</button></a>
+                <a href="/products"><button class="btn btn-light px-4 py-2">Search Items</button></a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- categories-->
+<div class="container-xl mt-5">
+    <h2 class="mb-4 text-center">Shop by Category</h2>
+
+    <div class="row text-center">
+        <div class="col-6 col-md-3 mb-4" th:each="cat : ${categories}">
+            <a th:href="@{'/products'(category=${cat.categoryName})}" style="text-decoration:none; color:inherit;">
+                <div class="category-card shadow-sm">
+                    <h5 class="mt-2" th:text="${cat.categoryName}"></h5>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<!-- featured prod-->
+<div class="container-xl mt-5">
+    <h2 class="mb-4 text-center">Featured Products</h2>
+
+    <div class="row" th:if="${featuredProducts}">
+        <div class="col-md-4 mb-4" th:each="p : ${featuredProducts}">
+            <div class="card shadow-sm product-card">
+
+                <!-- thumbnail-->
+                <img th:src="@{/assets/images/thumbs/{id}/{file}(id=${p.productId}, file=${p.featureImage})}"
+                     class="card-img-top"
+                     alt="thumbnail">
+
+                <div class="card-body text-center">
+                    <h5 class="card-title" th:text="${p.productName}"></h5>
+
+                    <p class="card-text">
+                        <!-- discount price -->
+                        <span class="h5 text-dark"
+                              th:if="${p.discountedPrice != null && p.discountedPrice < p.price}"
+                              th:text="'€' + ${p.discountedPrice}"></span>
+
+
+                        <span class="h5 text-dark"
+                              th:if="${p.discountedPrice == null || p.discountedPrice >= p.price}"
+                              th:text="'€' + ${p.price}"></span>
+
+                        <span class="h6 red-line-through ms-2"
+                              th:if="${p.discountedPrice != null && p.discountedPrice < p.price}"
+                              th:text="'€' + ${p.price}"></span>
+                    </p>
+
+                    <a th:href="@{'/products/' + ${p.productId}}">
+                        <button class="btn btn-outline-primary">View Details</button>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- shop now -->
+<div class="text-center mt-5">
+    <a href="/products">
+        <button class="btn btn-dark btn-lg">Shop Now !</button>
+    </a>
+</div>
+
+
+
+<footer class="footer mt-5 py-4">
+    <div class="container-xl text-center">
+
+        <p class="footer-brand mb-2">Zelora</p>
+
+        <div class="footer-links mb-3">
+            <a href="/contact" class="footer-link mx-2">Contact Us</a>
+            <a href="/about" class="footer-link mx-2">About Us</a>
+            <a href="/find-us" class="footer-link mx-2">Find Us</a>
+            <a href="/products" class="footer-link mx-2">Shop</a>
+        </div>
+
+        <p class="small mb-0" style="color:#ccc;">
+            © 2025 Zelora — All Rights Reserved.
+        </p>
+    </div>
+</footer>
+
+
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

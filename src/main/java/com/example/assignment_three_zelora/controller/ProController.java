@@ -3,7 +3,9 @@ package com.example.assignment_three_zelora.controller;
 
 import com.example.assignment_three_zelora.model.dto.ProductSearch;
 import com.example.assignment_three_zelora.model.entitys.Category;
+import com.example.assignment_three_zelora.model.entitys.Inventory;
 import com.example.assignment_three_zelora.model.entitys.Product;
+import com.example.assignment_three_zelora.model.entitys.Review;
 import com.example.assignment_three_zelora.model.repos.CategoryRepository;
 import com.example.assignment_three_zelora.model.service.ProductService;
 import org.springframework.stereotype.Controller;
@@ -51,12 +53,62 @@ public class ProController {
 
         return "products/search";
     }
+
+
     @GetMapping("/products/{id}")
     public String showProductDetails(@PathVariable Integer id, Model model) {
+
         Product product = productService.getProductById(id);
+        if (product == null) {
+            return "redirect:/products";
+        }
+
+        List<Review> reviews = productService.getGoodReviews(id);
+        Double avgRating = productService.getAverageRating(id);
+
+        Inventory inventory = productService.getInventory(id);
+
+        int available = 0;
+        String stockMessage = "Out of stock";
+
+        if (inventory != null) {
+            available = inventory.getQuantityInStock() - inventory.getQuantityReserved();
+
+            if (available <= 0) {
+                stockMessage = "Out of stock";
+            } else if (available <= inventory.getReorderPoint()) {
+                stockMessage = "Low stock — only " + available + " left!";
+            } else {
+                stockMessage = "In Stock (" + available + ")";
+            }
+        }
+
         model.addAttribute("product", product);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("avgRating", avgRating);
+
+        model.addAttribute("stockMessage", stockMessage);
+        model.addAttribute("available", available);
+
         return "products/details";
     }
+
+
+
+
+    @GetMapping("/")
+    public String showHome(Model model) {
+        List<Product> featured = productService.getThreeCheapestProducts();
+        List<Category> categories = categoryRepository.findAll();
+
+        model.addAttribute("featuredProducts", featured);
+
+        model.addAttribute("categories", categories);
+
+        return "home";
+    }
+
+
 
 
 

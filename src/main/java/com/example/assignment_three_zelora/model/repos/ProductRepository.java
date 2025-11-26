@@ -32,6 +32,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("productDesc") String productDesc,
             @Param("releaseAfter") Date releaseAfter
     );
+
+    List<Product> findTop3ByOrderByPriceAsc();
+
 }
 
 

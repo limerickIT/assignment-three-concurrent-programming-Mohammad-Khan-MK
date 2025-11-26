@@ -1,143 +1,293 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>Zelora - Product Search</title>
+  <title>Product Search</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"/>
 
-  <!-- DataTables -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <!-- DataTables CSS -->
+  <link rel="stylesheet"
+        href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
 
+  <!-- jQuery (for DataTables) -->
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
-  <style>
-    .thumb-img {
-      width: 70px;
-      height: auto;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    .search-container {
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-  </style>
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 </head>
 
-<body class="bg-light">
+<body class="bg-light p-4">
 
-<div class="container mt-4">
+<div class="container">
 
-  <h2 class="mb-4 fw-bold">Product Search</h2>
+  <!-- serach form-->
+  <h2 class="mb-4">Product Search</h2>
 
-  <!-- SEARCH FORM -->
-  <div class="search-container mb-4">
+  <form th:action="@{/products/search}" method="get"
+        th:object="${form}" class="row g-3 mb-4">
 
-    <form th:action="@{/products/search}" method="get" th:object="${form}" class="row g-3">
+    <!-- Name -->
+    <div class="col-md-4">
+      <label class="form-label">Name:</label>
+      <input type="text" th:field="*{name}" class="form-control"
+             placeholder="Product name">
+    </div>
 
-      <!-- Name -->
-      <div class="col-md-4">
-        <label class="form-label">Name</label>
-        <input th:field="*{name}" class="form-control" placeholder="Product name">
+    <!-- Category -->
+    <div class="col-md-4">
+      <label class="form-label">Category:</label>
+      <select th:field="*{category}" class="form-select">
+        <option value="">-- All Categories --</option>
+        <option th:each="c : ${categories}"
+                th:value="${c.categoryName}"
+                th:text="${c.categoryName}">
+        </option>
+      </select>
+    </div>
+
+    <!-- Min Price -->
+    <div class="col-md-2">
+      <label class="form-label">Min Price</label>
+      <input type="number" step="0.01" th:field="*{minPrice}"
+             class="form-control">
+    </div>
+
+    <!-- Max Price -->
+    <div class="col-md-2">
+      <label class="form-label">Max Price</label>
+      <input type="number" step="0.01" th:field="*{maxPrice}"
+             class="form-control">
+    </div>
+
+    <!-- serch by keyword-->
+    <div class="col-md-6">
+      <label class="form-label">Description Keyword</label>
+      <input type="text" th:field="*{productDesc}" class="form-control"
+             placeholder="Search in product description">
+    </div>
+
+    <!-- Recent -->
+    <div class="col-md-3 d-flex align-items-end">
+      <div class="form-check">
+        <input type="checkbox" th:field="*{recent}"
+               class="form-check-input" id="recentCheckbox">
+        <label class="form-check-label" for="recentCheckbox">
+          Recent (Last 7 Days)
+        </label>
       </div>
+    </div>
 
-      <!-- Category -->
-      <div class="col-md-4">
-        <label class="form-label">Category</label>
-        <select th:field="*{category}" class="form-select">
-          <option value="">-- All Categories --</option>
-          <option th:each="c : ${categories}"
-                  th:value="${c.categoryName}"
-                  th:text="${c.categoryName}"></option>
-        </select>
-      </div>
+    <!-- clear button -->
+    <div class="col-md-3 d-flex align-items-end justify-content-end gap-2">
+      <button type="submit" class="btn btn-primary">Search</button>
+      <a th:href="@{/products}" class="btn btn-outline-secondary">Clear</a>
+    </div>
+  </form>
 
-      <!-- Min Price -->
-      <div class="col-md-2">
-        <label class="form-label">Min Price</label>
-        <input type="number" step="0.01" th:field="*{minPrice}" class="form-control">
-      </div>
+  <hr/>
 
-      <!-- Max Price -->
-      <div class="col-md-2">
-        <label class="form-label">Max Price</label>
-        <input type="number" step="0.01" th:field="*{maxPrice}" class="form-control">
-      </div>
+<!--  search result-->
 
-      <!-- Description keyword -->
-      <div class="col-md-8">
-        <label class="form-label">Description contains</label>
-        <input th:field="*{productDesc}" class="form-control" placeholder="e.g. organic, cotton, jacket">
-      </div>
+  <h3 class="mb-3">Product Results</h3>
 
-      <!-- Recent checkbox -->
-      <div class="col-md-2 d-flex align-items-center">
-        <div class="form-check mt-4">
-          <input type="checkbox" th:field="*{recent}" class="form-check-input">
-          <label class="form-check-label">Recent (last 7 days)</label>
-        </div>
-      </div>
-
-      <!-- Buttons -->
-      <div class="col-md-2 d-flex align-items-end">
-        <button type="submit" class="btn btn-primary w-100">Search</button>
-      </div>
-
-      <div class="col-md-2 d-flex align-items-end">
-        <a href="/products" class="btn btn-secondary w-100">Clear Filters</a>
-      </div>
-
-    </form>
-  </div>
-
-  <hr />
-
-  <!-- RESULTS -->
-  <h3 class="mt-4 fw-semibold">Product Results</h3>
-
-  <table id="productTable" class="table table-striped table-bordered mt-3">
+  <table id="productTable"
+         class="table table-striped table-hover align-middle">
     <thead class="table-dark">
     <tr>
       <th>Thumb</th>
       <th>Name</th>
       <th>Category</th>
       <th>Price (€)</th>
-      <th>Release Date</th>
+      <th>Actions</th>
     </tr>
     </thead>
 
     <tbody>
     <tr th:each="p : ${products}">
-      <!-- Thumbnail -->
+      <!-- Thumb -->
+
       <td>
-        <img th:src="@{'/assets/images/thumbs/' + ${p.productId} + '/' + ${p.featureImage}}"
-             class="thumb-img">
+        <a th:href="@{/products/{id}(id=${p.productId})}">
+          <img th:src="@{/assets/images/thumbs/{id}/{file}(id=${p.productId}, file=${p.featureImage})}"
+               alt="thumb"
+               class="img-thumbnail"
+               style="width:70px;height:70px;object-fit:cover;">
+        </a>
       </td>
 
-      <!-- Product name clickable link -->
+
       <td>
-        <a th:href="@{'/products/' + ${p.productId}}"
-           th:text="${p.productName}"
-           class="text-decoration-none fw-semibold"></a>
+        <a th:href="@{/products/{id}(id=${p.productId})}"
+           th:text="${p.productName}">
+        </a>
       </td>
 
-      <td th:text="${p.categoryId.categoryName}"></td>
+
+      <!-- Category -->
+      <td th:text="${p.categoryId != null ? p.categoryId.categoryName : 'N/A'}"></td>
+
+      <!-- Price -->
       <td th:text="${p.price}"></td>
-      <td th:text="${p.releaseDate}"></td>
+
+      <!-- View Details button ) -->
+      <td>
+        <button type="button"
+                class="btn btn-sm btn-outline-primary view-details"
+                th:data-id="${p.productId}"
+                th:data-name="${p.productName}"
+                th:data-category="${p.categoryId != null ? p.categoryId.categoryName : 'N/A'}"
+                th:data-price="${p.price}"
+                th:data-desc="${p.description}">
+          View details
+        </button>
+      </td>
     </tr>
     </tbody>
   </table>
 
 </div>
 
+<!--modal view-->
+
+<div class="modal fade" id="productModal" tabindex="-1"
+     aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalLabel">Product</h5>
+        <button type="button" class="btn-close"
+                data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <!-- Left-side -->
+          <div class="col-md-6">
+            <img id="mainImage"
+                 class="img-fluid rounded mb-3 border"
+                 src="" alt="Product image"
+                 style="max-height:350px;object-fit:cover;">
+
+            <div id="thumbContainer"
+                 class="d-flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Right-side -->
+          <div class="col-md-6">
+            <h4 id="modalName"></h4>
+            <p class="text-muted mb-1">
+              Category: <span id="modalCategory"></span>
+            </p>
+            <p class="h4 text-success mb-3">
+              €<span id="modalPrice"></span>
+            </p>
+            <h6>Description</h6>
+            <p id="modalDescription" class="small"></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- data tables and modals -->
 <script>
+  // DataTables init
   $(document).ready(function () {
     $('#productTable').DataTable();
+  });
+
+
+  function buildImageUrls(productId) {
+    const urls = [];
+    for (let i = 1; i <= 4; i++) {
+      urls.push(`/assets/images/large/${productId}/${productId}_${i}.png`);
+    }
+    return urls;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const modalElement = document.getElementById('productModal');
+    const modal = new bootstrap.Modal(modalElement);
+
+    const mainImage = document.getElementById('mainImage');
+    const thumbContainer = document.getElementById('thumbContainer');
+    const modalName = document.getElementById('modalName');
+    const modalCategory = document.getElementById('modalCategory');
+    const modalPrice = document.getElementById('modalPrice');
+    const modalDescription = document.getElementById('modalDescription');
+
+    document.querySelectorAll('.view-details').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const name = btn.dataset.name;
+        const category = btn.dataset.category;
+        const price = btn.dataset.price;
+        const desc = btn.dataset.desc || 'No description available.';
+
+        modalName.textContent = name;
+        modalCategory.textContent = category;
+        modalPrice.textContent = price;
+        modalDescription.textContent = desc;
+
+        // Clear old thumbs
+        thumbContainer.innerHTML = '';
+
+        const urls = buildImageUrls(id);
+        let mainSet = false;
+
+        urls.forEach(url => {
+          const thumb = document.createElement('img');
+          thumb.src = url;
+          thumb.alt = 'thumb';
+          thumb.className = 'img-thumbnail';
+          thumb.style.width = '70px';
+          thumb.style.height = '70px';
+          thumb.style.objectFit = 'cover';
+          thumb.style.cursor = 'pointer';
+
+          // If the file doesn't exist, hide this thumb
+          thumb.addEventListener('error', () => {
+            thumb.remove();
+            if (!mainSet && mainImage.src === url) {
+              mainImage.src = '';
+            }
+          });
+
+          //  main image
+          thumb.addEventListener('load', () => {
+            if (!mainSet) {
+              mainImage.src = url;
+              mainSet = true;
+            }
+          });
+
+          thumb.addEventListener('click', () => {
+            mainImage.src = url;
+          });
+
+          thumbContainer.appendChild(thumb);
+        });
+
+        // if nothing loads
+        setTimeout(() => {
+          if (!mainSet) {
+            mainImage.src = '/assets/images/large/no-image.png';
+          }
+        }, 500);
+
+        modal.show();
+      });
+    });
   });
 </script>
 

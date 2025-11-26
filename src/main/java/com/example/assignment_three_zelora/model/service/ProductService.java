@@ -1,8 +1,12 @@
 package com.example.assignment_three_zelora.model.service;
 
 import com.example.assignment_three_zelora.model.dto.ProductSearch;
+import com.example.assignment_three_zelora.model.entitys.Inventory;
 import com.example.assignment_three_zelora.model.entitys.Product;
+import com.example.assignment_three_zelora.model.entitys.Review;
+import com.example.assignment_three_zelora.model.repos.InventoryRepository;
 import com.example.assignment_three_zelora.model.repos.ProductRepository;
+import com.example.assignment_three_zelora.model.repos.ReviewRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,10 +18,19 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
+    private final InventoryRepository inventoryRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository,
+                          ReviewRepository reviewRepository,
+                          InventoryRepository inventoryRepository) {
+
         this.productRepository = productRepository;
+        this.reviewRepository = reviewRepository;
+        this.inventoryRepository = inventoryRepository;
     }
+
+
 
     //create
     public Product createProduct(Product product) {
@@ -76,5 +89,25 @@ public class ProductService {
                 releaseAfter
         );
     }
+    public List<Product> getThreeCheapestProducts() {
+        return productRepository.findTop3ByOrderByPriceAsc();
+    }
+
+
+    public List<Review> getGoodReviews(Integer productId) {
+        return reviewRepository.findGoodReviews(productId);
+    }
+
+    public Double getAverageRating(Integer productId) {
+        Double avg = reviewRepository.findAverageRating(productId);
+        return (avg == null) ? 0.0 : avg;
+    }
+
+
+    // inventory
+    public Inventory getInventory(Integer productId) {
+        return inventoryRepository.findByProductId_ProductId(productId);
+    }
+
 
 }
