@@ -14,9 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.List;
+// imports for session
 
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 @Controller
 public class ProController {
 
@@ -95,19 +97,64 @@ public class ProController {
     @GetMapping("/products/{id}")
     public String showProductDetails(
             @PathVariable Integer id,
-            Model model) {
+            Model model,
+            HttpSession session) {
 
+    // products by id
         Product product = productService.getProductById(id);
 
         if (product == null) {
             return "redirect:/products";
         }
 
+    // fetch related data
         List<Review> reviews = productService.getGoodReviews(id);
         Double avgRating = productService.getAverageRating(id);
         Inventory inventory = productService.getInventory(id);
 
-        // Check stock
+        // unique feature:2 similar products
+        List<Product> similarProducts = productService.getSimilarProducts(product);
+        model.addAttribute("similarProducts", similarProducts);
+
+
+        // unique feature:1 recently viewed
+        // Get list from session
+        List<Integer> recent = (List<Integer>) session.getAttribute("recentlyViewed");
+
+        if (recent == null) {
+            recent = new ArrayList<>();
+        }
+
+        // Avoid duplicates if product already exists in the list
+        recent.remove(id);
+
+        // Add current product to the FRONT of the list
+        recent.add(0, id);
+
+        // Keep only last 5 viewed products
+        if (recent.size() > 5) {
+            recent = recent.subList(0, 5);
+        }
+
+        // Save back to session
+        session.setAttribute("recentlyViewed", recent);
+
+        // Convert IDs → real Product objects
+        List<Product> recentProducts = new ArrayList<>();
+
+        for (Integer pid : recent) {
+            if (!pid.equals(id)) {  // exclude the current product
+                Product p = productService.getProductById(pid);
+                if (p != null) {
+                    recentProducts.add(p);
+                }
+            }
+        }
+
+
+        model.addAttribute("recentProducts", recentProducts);
+
+        // stock calculation
         int available = 0;
         String stockMessage = "Out of stock";
 
@@ -124,11 +171,13 @@ public class ProController {
             }
         }
 
+    //sent to the view
         model.addAttribute("product", product);
         model.addAttribute("reviews", reviews);
         model.addAttribute("avgRating", avgRating);
         model.addAttribute("stockMessage", stockMessage);
         model.addAttribute("available", available);
+
 
         return "products/details";
     }

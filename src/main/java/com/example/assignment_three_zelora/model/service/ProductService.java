@@ -109,5 +109,18 @@ public class ProductService {
         return inventoryRepository.findByProductId_ProductId(productId);
     }
 
+    //similar products
+    public List<Product> getSimilarProducts(Product product) {
+
+        if (product == null || product.getCategoryId() == null) {
+            return List.of();
+        }
+
+        return productRepository.findTop4ByCategoryIdAndProductIdNot(
+                product.getCategoryId(),
+                product.getProductId()
+        );
+    }
+
 
 }

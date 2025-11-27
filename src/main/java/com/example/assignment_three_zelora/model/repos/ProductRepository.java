@@ -1,5 +1,6 @@
 package com.example.assignment_three_zelora.model.repos;
 
+import com.example.assignment_three_zelora.model.entitys.Category;
 import com.example.assignment_three_zelora.model.entitys.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -35,6 +36,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     );
 
     List<Product> findTop3ByOrderByPriceAsc();
+
+    List<Product> findTop4ByCategoryIdAndProductIdNot(Category categoryId, Integer productId);
+
+
+
+
 }
 
 
